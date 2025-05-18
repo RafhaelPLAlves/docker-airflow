@@ -1,0 +1,41 @@
+# Arquivo: Makefile
+
+# Nome do projeto (opcional)
+PROJECT_NAME ?= airflow-docker
+
+# Comando para buildar a imagem do Airflow (Dockerfile + requirements)
+build:
+	@echo "🔧 Construindo a imagem Docker do Airflow..."
+	docker-compose build
+
+# Inicializa o banco de dados e posteriomrnte os serviços
+up:
+	@echo "🚀 Inicializando o Airflow..."
+	docker-compose run --rm airflow-init
+	docker-compose up -d
+	@echo "✅ Airflow disponível em: http://localhost:8080"
+
+# Derruba os serviços
+down:
+	@echo "🛑 Derrubando os containers..."
+	docker-compose down
+
+# Limpa volumes e containers completamente
+clean:
+	@echo "🧹 Limpando tudo..."
+	docker-compose down -v --remove-orphans
+
+# Log dos containers
+logs:
+	docker-compose logs -f
+
+# Ajuda
+help:
+	@echo ""
+	@echo "📘 Comandos disponíveis:"
+	@echo "  make build   → Baixa e instala os pacotes necessários"
+	@echo "  make up      → Inicializa banco e sobe o Airflow"
+	@echo "  make down    → Derruba os containers"
+	@echo "  make clean   → Remove tudo (containers + volumes)"
+	@echo "  make logs    → Exibe os logs do Airflow"
+	@echo ""
